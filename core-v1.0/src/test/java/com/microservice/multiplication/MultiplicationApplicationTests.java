@@ -1,6 +1,8 @@
 package com.microservice.multiplication;
 
 import com.microservice.multiplication.domain.Multiplication;
+import com.microservice.multiplication.domain.MultiplicationResult;
+import com.microservice.multiplication.domain.User;
 import com.microservice.multiplication.service.Imp.MultiplicationServiceImp;
 import com.microservice.multiplication.service.RandomGeneratorService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -47,5 +48,15 @@ class MultiplicationApplicationTests {
         assertThat(multiplication.getFactorA()).isEqualTo(50);
         assertThat(multiplication.getFactorB()).isEqualTo(30);
 //        assertThat(multiplication.getResult()).isEqualTo(1500);
+    }
+
+    @Test
+    public void checkCorrectAttemptTest() {
+        Multiplication multiplication = new Multiplication(50, 60);
+        User user = new User("john_doe");
+        MultiplicationResult result = new MultiplicationResult(user, multiplication, 3000);
+        boolean attemptResult = multiplicationServiceImp.checkAttempt(result);
+
+        assertThat(attemptResult).isTrue();
     }
 }
