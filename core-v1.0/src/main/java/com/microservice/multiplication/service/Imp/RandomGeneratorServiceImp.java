@@ -1,10 +1,11 @@
 package com.microservice.multiplication.service.Imp;
 
 import com.microservice.multiplication.service.RandomGeneratorService;
+import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
-
+@Service
 public class RandomGeneratorServiceImp implements RandomGeneratorService {
     final static int MINIMUM_FACTOR = 11;
     final static int MAXIMUM_FACTOR = 99;
