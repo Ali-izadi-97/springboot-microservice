@@ -1,5 +1,5 @@
 package com.microservice.multiplication.service;
 
-public interface RandomNumberGeneratorService {
+public interface RandomGeneratorService {
     int generateRandomNumber();
 }
