@@ -13,3 +13,4 @@ public final class Multiplication {
         this(0, 0);
     }
 }
+
