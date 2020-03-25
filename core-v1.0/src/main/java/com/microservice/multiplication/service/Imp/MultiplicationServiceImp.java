@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -65,5 +66,10 @@ public class MultiplicationServiceImp implements MultiplicationService {
                 resultModel.getResult(), correct);
         resultRepository.save(checkedResult);
         return correct;
+    }
+
+    @Override
+    public List<MultiplicationResult> getStatusForUser(String userName) {
+        return resultRepository.findTop5ByUserNameOrderByIdDesc(userName);
     }
 }
