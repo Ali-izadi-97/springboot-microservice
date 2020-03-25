@@ -61,7 +61,7 @@ public class MultiplicationControllerResultTest {
         User user = new User("user");
         Multiplication multiplication = new Multiplication(10, 11);
         MultiplicationResult multiplicationResult = new MultiplicationResult(user,
-                multiplication, 110);
+                multiplication, 110, correct);
 
         MockHttpServletResponse response = mvc.perform(
                 post("/results").contentType(MediaType.APPLICATION_JSON)

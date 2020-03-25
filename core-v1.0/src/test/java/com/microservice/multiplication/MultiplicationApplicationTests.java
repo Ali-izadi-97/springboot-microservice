@@ -54,7 +54,7 @@ class MultiplicationApplicationTests {
     public void checkCorrectAttemptTest() {
         Multiplication multiplication = new Multiplication(50, 60);
         User user = new User("john_doe");
-        MultiplicationResult result = new MultiplicationResult(user, multiplication, 3000);
+        MultiplicationResult result = new MultiplicationResult(user, multiplication, 3000, true);
         boolean attemptResult = multiplicationServiceImp.checkAttempt(result);
 
         assertThat(attemptResult).isTrue();

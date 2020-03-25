@@ -23,7 +23,7 @@ $(document).ready(function () {
         userAlias = $form.find("input[name='user-alias']").val();
         var data = { user: { name: userAlias}, multiplication:
                 {factorA: a, factorB: b}, result: attempt};
-
+        console.log(data)
         $.ajax({
             url: '/results',
             type: 'POST',

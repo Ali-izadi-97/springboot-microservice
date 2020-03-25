@@ -6,6 +6,7 @@ import com.microservice.multiplication.service.MultiplicationService;
 import com.microservice.multiplication.service.RandomGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 
 @Service
@@ -27,7 +28,14 @@ public class MultiplicationServiceImp implements MultiplicationService {
 
     @Override
     public boolean checkAttempt(final MultiplicationResult resultModel) {
-        return resultModel.getResult() == resultModel.getMultiplication().getFactorB() *
+        boolean correct = resultModel.getResult() == resultModel.getMultiplication().getFactorB() *
                 resultModel.getMultiplication().getFactorA();
+
+        Assert.isTrue(!resultModel.isCorrect(),"dont send true as result of correct!");
+
+        MultiplicationResult checkedResult = new MultiplicationResult(resultModel.getUser(),
+                resultModel.getMultiplication(),
+                resultModel.getResult(), correct);
+        return correct;
     }
 }

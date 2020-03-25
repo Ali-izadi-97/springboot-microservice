@@ -26,8 +26,7 @@ public class MultiplicationResultController {
         System.out.println(multiplicationResult);
         return ResponseEntity.ok(
                 new WrapResultResponse(multiplicationService
-                        .checkAttempt(multiplicationResult))
-        );
+                        .checkAttempt(multiplicationResult)));
     }
 
 
