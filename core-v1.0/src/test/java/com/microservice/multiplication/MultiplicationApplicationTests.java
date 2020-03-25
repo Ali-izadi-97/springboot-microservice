@@ -3,6 +3,9 @@ package com.microservice.multiplication;
 import com.microservice.multiplication.domain.Multiplication;
 import com.microservice.multiplication.domain.MultiplicationResult;
 import com.microservice.multiplication.domain.User;
+import com.microservice.multiplication.repository.MultiplicationRepository;
+import com.microservice.multiplication.repository.MultiplicationResultRepository;
+import com.microservice.multiplication.repository.UserRepository;
 import com.microservice.multiplication.service.Imp.MultiplicationServiceImp;
 import com.microservice.multiplication.service.RandomGeneratorService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.slf4j.Logger;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -34,10 +36,18 @@ class MultiplicationApplicationTests {
     @Mock
     private RandomGeneratorService randomGeneratorService;
 
+    @Mock
+    private MultiplicationResultRepository multiplicationResultRepository;
+    @Mock
+    private MultiplicationRepository multiplicationRepository;
+    @Mock
+    private UserRepository userRepository;
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        multiplicationServiceImp = new MultiplicationServiceImp(randomGeneratorService);
+        multiplicationServiceImp = new MultiplicationServiceImp(randomGeneratorService,
+                multiplicationResultRepository, userRepository, multiplicationRepository);
     }
     @Test
     public void createRandomMultiplicationTest() {
