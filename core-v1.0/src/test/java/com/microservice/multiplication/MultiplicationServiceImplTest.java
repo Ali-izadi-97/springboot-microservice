@@ -23,7 +23,7 @@ public class MultiplicationServiceImplTest {
     private MultiplicationServiceImp multiplicationServiceImp;
 
     @Test
-    public void checkCorrectAttemptTest() {
+    public void checkCorrectResultTest() {
         Multiplication multiplication = new Multiplication(50, 60);
         User user = new User("john_doe");
         MultiplicationResult attempt = new
@@ -34,7 +34,7 @@ public class MultiplicationServiceImplTest {
     }
 
     @Test
-    public void checkWrongAttemptTest() {
+    public void checkWrongResultTest() {
         Multiplication multiplication = new Multiplication(50, 60);
         User user = new User("john_doe");
         MultiplicationResult attempt = new
@@ -42,5 +42,10 @@ public class MultiplicationServiceImplTest {
 //        given(userRepository.findByAlias("john_doe")).willReturn(Optional.empty());
         boolean attemptResult = multiplicationServiceImp.checkAttempt(attempt);
         assertThat(attemptResult).isFalse();
+    }
+
+    @Test
+    public void retrieveStatusTest() {
+
     }
 }
