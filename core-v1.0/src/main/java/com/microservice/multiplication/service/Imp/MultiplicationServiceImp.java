@@ -3,6 +3,8 @@ package com.microservice.multiplication.service.Imp;
 import com.microservice.multiplication.domain.Multiplication;
 import com.microservice.multiplication.domain.MultiplicationResult;
 import com.microservice.multiplication.domain.User;
+import com.microservice.multiplication.event.EventDispatcher;
+import com.microservice.multiplication.event.MultiplicationSolvedEvent;
 import com.microservice.multiplication.repository.MultiplicationRepository;
 import com.microservice.multiplication.repository.MultiplicationResultRepository;
 import com.microservice.multiplication.repository.UserRepository;
@@ -24,16 +26,19 @@ public class MultiplicationServiceImp implements MultiplicationService {
     private MultiplicationResultRepository resultRepository;
     private UserRepository userRepository;
     private MultiplicationRepository multiplicationRepository;
+    private EventDispatcher eventDispatcher;
 
     @Autowired
     public MultiplicationServiceImp(final RandomGeneratorService randomGenerator,
                                     final MultiplicationResultRepository multiplicationResultRepository,
                                     final UserRepository userRepository,
-                                    final MultiplicationRepository multiplicationRepository) {
+                                    final MultiplicationRepository multiplicationRepository,
+                                    final EventDispatcher eventDispatcher) {
         this.randomGeneratorService = randomGenerator;
         this.resultRepository = multiplicationResultRepository;
         this.userRepository = userRepository;
         this.multiplicationRepository = multiplicationRepository;
+        this.eventDispatcher = eventDispatcher;
     }
 
     @Override
@@ -55,17 +60,20 @@ public class MultiplicationServiceImp implements MultiplicationService {
     public boolean checkAttempt(final MultiplicationResult resultModel) {
         Optional<User> user = userRepository.findByName(resultModel.getUser().getName());
 
-        boolean correct = resultModel.getResult() == resultModel.getMultiplication().getFactorB() *
+        boolean isCorrect = resultModel.getResult() == resultModel.getMultiplication().getFactorB() *
                 resultModel.getMultiplication().getFactorA();
 
-        Assert.isTrue(!resultModel.isCorrect(),"dont send true as result of correct!");
+        Assert.isTrue(!resultModel.isCorrect(), "dont send true as result of correct!");
 
         MultiplicationResult checkedResult = new MultiplicationResult(
                 user.orElse(resultModel.getUser()),
                 resultModel.getMultiplication(),
-                resultModel.getResult(), correct);
+                resultModel.getResult(), isCorrect);
         resultRepository.save(checkedResult);
-        return correct;
+        eventDispatcher.send(new MultiplicationSolvedEvent(checkedResult.getId(),
+                checkedResult.getUser().getId(), checkedResult.isCorrect()));
+
+        return isCorrect;
     }
 
     @Override

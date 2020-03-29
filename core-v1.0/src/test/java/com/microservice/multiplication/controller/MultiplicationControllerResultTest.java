@@ -1,4 +1,4 @@
-package com.microservice.multiplication;
+package com.microservice.multiplication.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microservice.multiplication.controller.MultiplicationResultController;

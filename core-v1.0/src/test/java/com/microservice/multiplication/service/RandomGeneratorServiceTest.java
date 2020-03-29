@@ -1,4 +1,4 @@
-package com.microservice.multiplication;
+package com.microservice.multiplication.service;
 
 import com.microservice.multiplication.service.RandomGeneratorService;
 import org.junit.jupiter.api.Test;

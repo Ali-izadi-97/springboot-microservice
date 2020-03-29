@@ -1,4 +1,4 @@
-package com.microservice.multiplication;
+package com.microservice.multiplication.controller;
 
 import com.microservice.multiplication.domain.Multiplication;
 import com.microservice.multiplication.domain.MultiplicationResult;
