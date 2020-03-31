@@ -3,6 +3,7 @@ package com.microservice.multiplication.controller;
 import com.microservice.multiplication.domain.Multiplication;
 import com.microservice.multiplication.domain.MultiplicationResult;
 import com.microservice.multiplication.domain.User;
+import com.microservice.multiplication.event.EventDispatcher;
 import com.microservice.multiplication.repository.MultiplicationRepository;
 import com.microservice.multiplication.repository.MultiplicationResultRepository;
 import com.microservice.multiplication.repository.UserRepository;
@@ -43,25 +44,26 @@ class MultiplicationApplicationTests {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private EventDispatcher eventDispatcher;
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         multiplicationServiceImp = new MultiplicationServiceImp(randomGeneratorService,
-                multiplicationResultRepository, userRepository, multiplicationRepository);
+                multiplicationResultRepository, userRepository, multiplicationRepository, eventDispatcher);
     }
+
     @Test
     public void createRandomMultiplicationTest() {
         given(randomGeneratorService.generateRandomNumber()).willReturn(50, 30);
         Multiplication multiplication = multiplicationServiceImp.createRandomMultiplication();
-        log.info(multiplication.getFactorA() + "   " + multiplication.getFactorB());
-
+//        log.info(multiplication.getFactorA() + "   " + multiplication.getFactorB());
         assertThat(multiplication.getFactorA()).isEqualTo(50);
         assertThat(multiplication.getFactorB()).isEqualTo(30);
-//        assertThat(multiplication.getResult()).isEqualTo(1500);
     }
 
     @Test
-    public void checkCorrectAttemptTest() {
+    public void checkCorrectnessOfResultTest() {
         Multiplication multiplication = new Multiplication(50, 60);
         User user = new User("john_doe");
         MultiplicationResult result = new MultiplicationResult(user, multiplication, 3000, true);
