@@ -80,4 +80,9 @@ public class MultiplicationServiceImp implements MultiplicationService {
     public List<MultiplicationResult> getStatusForUser(String userName) {
         return resultRepository.findTop5ByUserNameOrderByIdDesc(userName);
     }
+
+    @Override
+    public Optional<MultiplicationResult> getResultById(Long id) {
+        return resultRepository.findById(id);
+    }
 }

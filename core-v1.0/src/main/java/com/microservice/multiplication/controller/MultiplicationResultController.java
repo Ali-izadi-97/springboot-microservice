@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/results")
@@ -29,6 +30,11 @@ public class MultiplicationResultController {
                         .checkAttempt(multiplicationResult)));
     }
 
+
+    @GetMapping("/{resultId}")
+    public ResponseEntity<Optional<MultiplicationResult>> getResultById(@PathVariable("resultId") Long resultId) {
+        return ResponseEntity.ok(multiplicationService.getResultById(resultId));
+    }
 
     @AllArgsConstructor
     @NoArgsConstructor(force = true)
