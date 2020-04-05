@@ -17,9 +17,9 @@ public class EventHandler {
         this.gameService = gameService;
     }
 
-    @RabbitListener(queues = "${multiolication.queue}")
+    @RabbitListener(queues = "gamification_multiplication_queue")
     public void handleMultiplicationSolved(final MultiplicationSolvedEvent event) {
-        log.info("Multiplication Solved Event received: {}", event.getMultiplicationResultId());
+        log.info("Multiplication Solved Event received: {}", event);
 
         try {
             gameService.newAttemptForUser(event.getUserId(),

@@ -1,13 +1,11 @@
 package com.microservice.gamification.event;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 
 @RequiredArgsConstructor
+@NoArgsConstructor(force = true)
 @Getter @ToString @EqualsAndHashCode
 public class MultiplicationSolvedEvent implements Serializable {
     private final Long multiplicationResultId;
