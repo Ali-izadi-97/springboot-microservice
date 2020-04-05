@@ -5,9 +5,11 @@ import com.microservice.gamification.domain.ScoreCard;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface ScoreCardRepository extends CrudRepository<ScoreCard, Long> {
 
     @Query("SELECT SUM(s.score) FROM com.microservice.gamification.domain.ScoreCard s WHERE s.userId = :userId GROUP BY s.userId")
