@@ -1,5 +1,7 @@
 package com.microservice.gamification.service.Impl;
 
+import com.microservice.gamification.client.MultiplicationResultAttemptClient;
+import com.microservice.gamification.client.dto.MultiplicationResultDto;
 import com.microservice.gamification.domain.Badge;
 import com.microservice.gamification.domain.BadgeCard;
 import com.microservice.gamification.domain.GameStats;
@@ -19,20 +21,26 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class GameServiceImpl implements GameService {
+    public static final int LOCKY_NUMBER = 42;
+
     private ScoreCardRepository scoreCardRepository;
     private BadgeCardRepository badgeCardRepository;
+    private MultiplicationResultAttemptClient attemptClient;
 
     @Autowired
-    public GameServiceImpl(ScoreCardRepository scoreCardRepository, BadgeCardRepository badgeCardRepository) {
+    public GameServiceImpl(ScoreCardRepository scoreCardRepository,
+                           BadgeCardRepository badgeCardRepository, MultiplicationResultAttemptClient attempt) {
         this.scoreCardRepository = scoreCardRepository;
         this.badgeCardRepository = badgeCardRepository;
+        this.attemptClient = attempt;
     }
 
     @Override
     public GameStats newAttemptForUser(Long userId, Long multiplicationResultId, boolean correct) {
         if (correct) {
             ScoreCard scoreCard = new ScoreCard(userId, multiplicationResultId);
-            log.info("User with id {} scored {} points forattempt id {}", userId, scoreCard.getScore(), multiplicationResultId);
+            scoreCardRepository.save(scoreCard);
+            log.info("User with id {} scored {} points for attempt id {}", userId, scoreCard.getScore(), multiplicationResultId);
 
             List<BadgeCard> badgeCards = processForBadges(userId, multiplicationResultId);
             return new GameStats(userId, scoreCard.getScore(), badgeCards.stream().map(BadgeCard::getBadge).collect(Collectors.toList()));
@@ -50,14 +58,23 @@ public class GameServiceImpl implements GameService {
         List<BadgeCard> badgeCardList = badgeCardRepository.findByUserIdOrderByBadgeTimestampDesc(userId);
 
         checkAndGiveBadgeBasedOnScore(badgeCardList, Badge.BRONZE_MULTIPLICATOR, totalScore, 100, userId)
-        .ifPresent(badgeCards::add);
+                .ifPresent(badgeCards::add);
         checkAndGiveBadgeBasedOnScore(badgeCardList, Badge.SILVER_MULTIPLICATOR, totalScore, 500, userId)
-        .ifPresent(badgeCards::add);
+                .ifPresent(badgeCards::add);
         checkAndGiveBadgeBasedOnScore(badgeCardList, Badge.GOLD_MULTIPLICATOR, totalScore, 999, userId)
-        .ifPresent(badgeCards::add);
+                .ifPresent(badgeCards::add);
 
         if (scoreCardList.size() == 1 && !containsBadge(badgeCardList, Badge.FIRST_WON)) {
-            BadgeCard firstWonBadge = giveBadgeToUser(Badge.FIRST_WON, userId);badgeCards.add(firstWonBadge);
+            BadgeCard firstWonBadge = giveBadgeToUser(Badge.FIRST_WON, userId);
+            badgeCards.add(firstWonBadge);
+        }
+//
+        MultiplicationResultDto attemptObject = attemptClient.retriveMultiplicationResultId(attempId);
+        log.info("attempt restlt object is {}", attemptObject);
+        if (!containsBadge(badgeCardList, Badge.LOCKY_NUMBER) &&
+                (LOCKY_NUMBER == attemptObject.getMultiplicationFactorA() || LOCKY_NUMBER == attemptObject.getMultiplicationFactorB())) {
+            BadgeCard luckyNumberBadge = giveBadgeToUser(Badge.LOCKY_NUMBER, userId);
+            badgeCards.add(luckyNumberBadge);
         }
         return badgeCards;
     }
