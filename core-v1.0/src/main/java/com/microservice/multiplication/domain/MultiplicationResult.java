@@ -9,7 +9,7 @@ import javax.persistence.*;
 @RequiredArgsConstructor
 public class MultiplicationResult {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
