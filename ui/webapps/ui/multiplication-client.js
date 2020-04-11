@@ -1,7 +1,8 @@
+var SERVER_URL = "http://localhost:8000/api";
 function updateMultiplication()
 {
     $.ajax({
-        url: "http://localhost:8080/multiplications/random"
+        url: SERVER_URL+"/random"
     }).then(function (data) {
         $("#attempt-form").find("input[name='result-attempt']").val("");
         $("#attempt-form").find("input[name='user-alias']").val("");
